@@ -21,6 +21,7 @@ function App() {
 
   return (
     <BrowserRouter>
+      <div className="min-h-screen bg-[#20232d] text-[#f4f5f7]">
       <Header favoritesCount={favorites.length} />
 
       <Routes>
@@ -55,13 +56,17 @@ function App() {
         <Route
           path="*"
           element={
-            <main>
-              <h1>Page not found</h1>
-              <Link to="/">Back to Search</Link>
+            <main className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+              <div className="rounded-3xl border border-white/10 bg-[#11141b] p-8 shadow-2xl shadow-black/20">
+                <p className="mb-2 text-sm font-semibold uppercase tracking-[0.2em] text-[#73f0a8]">404 · Not found</p>
+                <h1 className="text-3xl font-bold tracking-tight">Page not found</h1>
+                <Link className="mt-6 inline-flex rounded-full bg-[#73f0a8] px-5 py-3 font-semibold text-[#102016] transition hover:bg-[#98ffc0] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#73f0a8]" to="/">Back to Search</Link>
+              </div>
             </main>
           }
         />
       </Routes>
+      </div>
     </BrowserRouter>
   );
 }
