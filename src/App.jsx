@@ -4,7 +4,7 @@ import MovieDetailsPage from "./pages/MovieDetailsPage";
 import FavoritesPage from "./pages/FavoritesPage";
 import Header from "./components/Header";
 import { useState } from "react";
-import { getFavorites, saveFavorite, removeFavorite } from "./utils/favorites";
+import { getFavorites, saveFavorite, removeFavorites } from "./utils/favorites";
 
 function App() {
   const [favorites, setFavorites] = useState(getFavorites);
@@ -13,7 +13,7 @@ function App() {
 
   const toggleFavorite = (movie) => {
     if (isFavorite(movie.imdbID)) {
-      setFavorites(removeFavorite(movie.imdbID));
+      setFavorites(removeFavorites(movie.imdbID));
     } else {
       setFavorites(saveFavorite(movie));
     }

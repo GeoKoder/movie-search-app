@@ -1,38 +1,27 @@
+import { useState } from "react";
 import SearchBar from "../components/SearchBar";
 import MovieGrid from "../components/MovieGrid";
+import useFetch from "../hooks/useFetch";
 
 const API_KEY = import.meta.env.VITE_OMDB_API_KEY;
-import { useState } from "react";
 
 function HomePage({ isFavorite, onToggleFavorite }) {
-  const [movies, setMovies] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const [searchTerm, setSearchTerm] = useState("");
 
-  const handleSearch = async (term) => {
-    setLoading(true);
-    setError(null);
-    setMovies([]);
+  const url = searchTerm
+    ? `https://www.omdbapi.com/?apikey=${API_KEY}&s=${encodeURIComponent(searchTerm)}`
+    : null;
 
-    try {
-      const res = await fetch(
-        `https://www.omdbapi.com/?apikey=${API_KEY}&s=${term}`,
-      );
+  const { data, loading, error, refetch } = useFetch(url);
 
-      if (!res.ok) {
-        throw new Error(`Request failed (status ${res.status})`);
-      }
+  const movies = data?.Response === "True" ? data.Search : [];
+  const message = error || (data?.Response === "False" ? data.Error : null);
 
-      const data = await res.json();
-      if (data.Response === "True") {
-        setMovies(data.Search);
-      } else {
-        setError(data.Error || "No movies found.");
-      }
-    } catch (err) {
-      setError("Something went wrong. Check your connection and try again.");
-    } finally {
-      setLoading(false);
+  const handleSearch = (term) => {
+    if (term === searchTerm) {
+      refetch();
+    } else {
+      setSearchTerm(term);
     }
   };
 
