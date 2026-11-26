@@ -1,12 +1,13 @@
 import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
+import FavoriteButton from "../components/FavoriteButton";
 
 const API_KEY = import.meta.env.VITE_OMDB_API_KEY;
 
 // OMDb uses the string "N/A" for missing fields
 const display = (value) => (value && value !== "N/A" ? value : "Not available");
 
-function MovieDetailsPage() {
+function MovieDetailsPage({ isFavorite, onToggleFavorite }) {
   const { id: imdbID } = useParams();
   const [movie, setMovie] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -22,7 +23,7 @@ function MovieDetailsPage() {
 
       try {
         const res = await fetch(
-          `https://www.omdbapi.com/?apikey=${API_KEY}&i=${imdbID}&plot=full`
+          `https://www.omdbapi.com/?apikey=${API_KEY}&i=${imdbID}&plot=full`,
         );
 
         if (!res.ok) {
@@ -30,7 +31,7 @@ function MovieDetailsPage() {
         }
 
         const data = await res.json();
-        console.log(data)
+        console.log(data);
         if (ignore) return;
 
         if (data.Response === "True") {
@@ -40,7 +41,9 @@ function MovieDetailsPage() {
         }
       } catch (err) {
         if (!ignore) {
-          setError("Something went wrong. Check your connection and try again.");
+          setError(
+            "Something went wrong. Check your connection and try again.",
+          );
         }
       } finally {
         if (!ignore) setLoading(false);
@@ -71,10 +74,16 @@ function MovieDetailsPage() {
             <div className="poster-placeholder">No poster available</div>
           )}
 
-          <div>
+          <div className="title-row">
             <h1>{movie.Title}</h1>
+            <FavoriteButton
+              movie={movie}
+              active={isFavorite(movie.imdbID)}
+              onToggle={() => onToggleFavorite(movie)}
+            />
             <p>
-              {display(movie.Year)} · {display(movie.Rated)} · {display(movie.Runtime)}
+              {display(movie.Year)} · {display(movie.Rated)} ·{" "}
+              {display(movie.Runtime)}
             </p>
 
             <dl>

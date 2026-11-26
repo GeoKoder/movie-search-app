@@ -1,11 +1,12 @@
 import { Link } from "react-router-dom";
+import FavoriteButton from "./FavoriteButton";
 
-function MovieCard({ movie }) {
+function MovieCard({ movie, isFavorite, onToggleFavorite }) {
   const hasPoster = movie.Poster && movie.Poster !== "N/A";
 
   return (
-    <Link to={`/movie/${movie.imdbID}`} className="movie-card-link">
-      <article>
+    <article className="movie-card">
+      <Link to={`/movie/${movie.imdbID}`} className="movie-card-link">
         {hasPoster ? (
           <img src={movie.Poster} alt={`${movie.Title} poster`} />
         ) : (
@@ -15,8 +16,13 @@ function MovieCard({ movie }) {
         <p>
           {movie.Year} · {movie.Type}
         </p>
-      </article>
-    </Link>
+      </Link>
+      <FavoriteButton
+        movie={movie}
+        active={isFavorite(movie.imdbID)}
+        onToggle={() => onToggleFavorite(movie)}
+      />
+    </article>
   );
 }
 
