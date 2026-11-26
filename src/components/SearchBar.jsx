@@ -2,11 +2,16 @@ import { useState } from "react"
 
 function SearchBar({ onSearch }) {
     const [term, setTerm] = useState("")
+    const [emptyMessage, setEmptyMessage] = useState("")
 
     const handleSubmit = (e) => {
         e.preventDefault()
         const trimmed = term.trim()
-        if (!trimmed) return
+        if (!trimmed) {
+            setEmptyMessage("Enter a movie title to start your search.")
+            return
+        }
+        setEmptyMessage("")
         onSearch(trimmed)
     }
   return (
@@ -19,6 +24,7 @@ function SearchBar({ onSearch }) {
             aria-label="Search for a movie"
         />
         <button type="submit">Submit</button>
+        {emptyMessage && <p role="alert">{emptyMessage}</p>}
     </form>
   )
 }

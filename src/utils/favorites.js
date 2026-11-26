@@ -30,5 +30,7 @@ export function saveFavorite(movie) {
 }
 
 export function removeFavorites(imdbID) {
-    return getFavorites().some((m) => m.imdbID === imdbID)
+  const updated = getFavorites().filter((movie) => movie.imdbID !== imdbID);
+  writeFavorites(updated);
+  return updated;
 }

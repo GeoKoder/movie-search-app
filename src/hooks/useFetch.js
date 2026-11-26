@@ -12,9 +12,6 @@ function useFetch(url) {
 
     useEffect(() => {
         if (!url) {
-            setData(null)
-            setError(null)
-            setLoading(false)
             return
         }
 
@@ -29,7 +26,7 @@ function useFetch(url) {
                 const res = await fetch(url, { signal: controller.signal })
 
                 if (!res.ok) {
-                    throw new Error(`Request failed (status ${res.status})`)
+                    throw new Error("The movie service is unavailable right now. Please try again.")
                 }
 
                 const json = await res.json()
@@ -39,7 +36,9 @@ function useFetch(url) {
                 setLoading(false)
             } catch (error) {
                 if (error.name === "AbortError") return
-                setError("Something went wrong. Check your connection and try again.")
+                setError(error instanceof TypeError
+                    ? "Could not reach the movie service. Check your internet connection and try again."
+                    : error.message || "Something went wrong. Please try again.")
                 setLoading(false)
             }
         }

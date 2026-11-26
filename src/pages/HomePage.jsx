@@ -15,8 +15,6 @@ function HomePage({ isFavorite, onToggleFavorite }) {
   const { data, loading, error, refetch } = useFetch(url);
 
   const movies = data?.Response === "True" ? data.Search : [];
-  const message = error || (data?.Response === "False" ? data.Error : null);
-
   const handleSearch = (term) => {
     if (term === searchTerm) {
       refetch();
@@ -38,6 +36,9 @@ function HomePage({ isFavorite, onToggleFavorite }) {
           isFavorite={isFavorite}
           onToggleFavorite={onToggleFavorite}
         />
+      )}
+      {!loading && !error && data?.Response === "False" && (
+        <p role="status">{data.Error === "Movie not found!" ? "No movies found. Check the title and try again." : data.Error}</p>
       )}
     </div>
   );
