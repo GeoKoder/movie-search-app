@@ -32,7 +32,7 @@ function HomePage({ isFavorite, onToggleFavorite }) {
       <SearchBar onSearch={handleSearch} />
       </section>
 
-      {loading && <p className="mx-auto mt-10 max-w-7xl rounded-2xl border border-white/10 bg-[#11141b] p-5 text-slate-300" role="status">Searching movies…</p>}
+      {loading && <p className="mx-auto mt-10 flex max-w-7xl items-center gap-3 rounded-2xl border border-white/10 bg-[#11141b] p-5 text-slate-300" role="status"><span aria-hidden="true" className="size-5 animate-spin rounded-full border-2 border-white/20 border-t-[#73f0a8]" />Searching movies…</p>}
       {error && <p className="mx-auto mt-10 max-w-7xl rounded-2xl border border-[#ffb4ab]/20 bg-[#321f24] p-5 text-[#ffd8d2]" role="alert">{error}</p>}
       {!loading && !error && movies.length > 0 && (
         <MovieGrid

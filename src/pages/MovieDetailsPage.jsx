@@ -24,7 +24,7 @@ function MovieDetailsPage({ isFavorite, onToggleFavorite }) {
     <main className="mx-auto max-w-7xl px-4 pb-16 pt-8 sm:px-6 lg:px-8">
       <Link className="inline-flex rounded-full px-3 py-2 text-sm font-medium text-slate-300 transition hover:bg-white/5 hover:text-[#73f0a8] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#73f0a8]" to="/">← Back to Search</Link>
 
-      {loading && <p className="mt-6 rounded-2xl border border-white/10 bg-[#11141b] p-5 text-slate-300" role="status">Loading movie details…</p>}
+      {loading && <p className="mt-6 flex items-center gap-3 rounded-2xl border border-white/10 bg-[#11141b] p-5 text-slate-300" role="status"><span aria-hidden="true" className="size-5 animate-spin rounded-full border-2 border-white/20 border-t-[#73f0a8]" />Loading movie details…</p>}
       {message && <p className="mt-6 rounded-2xl border border-[#ffb4ab]/20 bg-[#321f24] p-5 text-[#ffd8d2]" role="alert">{message}</p>}
 
       {movie && (

@@ -1,14 +1,15 @@
-import { useEffect } from "react";
-import { useCallback } from "react";
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 function useFetch(url) {
-    const [data, setData] = useState(null)
-    const [loading, setLoading] = useState(Boolean(url))
-    const [error, setError] = useState(null)
+    const [result, setResult] = useState(null)
     const [reloadKey, setReloadKey] = useState(0)
 
     const refetch = useCallback(() => setReloadKey((k) => k + 1), [])
+    const requestKey = url ? `${url}::${reloadKey}` : null
+    const isCurrentResult = result?.requestKey === requestKey
+    const data = isCurrentResult ? result.data : null
+    const error = isCurrentResult ? result.error : null
+    const loading = Boolean(url) && !isCurrentResult
 
     useEffect(() => {
         if (!url) {
@@ -18,10 +19,6 @@ function useFetch(url) {
         const controller = new AbortController()
 
         async function load() {
-            setLoading(true)
-            setError(null)
-            setData(null)
-
             try {
                 const res = await fetch(url, { signal: controller.signal })
 
@@ -32,21 +29,20 @@ function useFetch(url) {
                 const json = await res.json()
                 if (controller.signal.aborted) return
 
-                setData(json)
-                setLoading(false)
+                setResult({ requestKey, data: json, error: null })
             } catch (error) {
                 if (error.name === "AbortError") return
-                setError(error instanceof TypeError
+                const message = error instanceof TypeError
                     ? "Could not reach the movie service. Check your internet connection and try again."
-                    : error.message || "Something went wrong. Please try again.")
-                setLoading(false)
+                    : error.message || "Something went wrong. Please try again."
+                setResult({ requestKey, data: null, error: message })
             }
         }
 
         load()
 
         return () => controller.abort()
-    }, [url, reloadKey])
+    }, [url, reloadKey, requestKey])
 
     return { data, loading, error, refetch }
 }
